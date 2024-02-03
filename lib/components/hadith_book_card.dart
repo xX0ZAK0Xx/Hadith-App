@@ -3,13 +3,17 @@ import 'package:hadith/const/styles.dart';
 import 'package:hexagon/hexagon.dart';
 
 class HadithBookCard extends StatelessWidget {
-  const HadithBookCard({
-    super.key, required this.abvr_code, required this.title, required this.title_ar, required this.number_of_hadis,
+  HadithBookCard({
+    super.key, required this.abvr_code, required this.title, required this.title_ar, required this.number_of_hadis, required this.hexagonColor,
   });
   final String abvr_code, title, title_ar, number_of_hadis;
+  String? hexagonColor;
 
   @override
   Widget build(BuildContext context) {
+    hexagonColor = hexagonColor?.replaceAll("#", "");
+    int hexValue = int.parse(hexagonColor!, radix: 16);
+    print(hexValue);
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(15),
@@ -32,7 +36,7 @@ class HadithBookCard extends StatelessWidget {
                     width: 45,
                     height: 45,
                     cornerRadius: 10,
-                    color: appGreen(),
+                    color: Color(0xFF000000 | hexValue),
                     child: Text(
                       abvr_code,
                       style: appStylePoppins(Colors.white, FontWeight.w500, 16),

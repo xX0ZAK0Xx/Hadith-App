@@ -77,6 +77,7 @@ class _HomePageState extends State<HomePage> {
                           title_ar: _books_list![index].title_ar,
                           number_of_hadis:
                               _books_list![index].number_of_hadis.toString(),
+                          hexagonColor: _books_list![index].color_code,
                         ),
                       );
                     },
