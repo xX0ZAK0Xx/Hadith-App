@@ -13,7 +13,6 @@ class HadithBookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     hexagonColor = hexagonColor?.replaceAll("#", "");
     int hexValue = int.parse(hexagonColor!, radix: 16);
-    print(hexValue);
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(15),

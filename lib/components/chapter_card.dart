@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:hadith/const/styles.dart';
+import 'package:hadith/controller/book_controller.dart';
 import 'package:hexagon/hexagon.dart';
 
 class ChapterCard extends StatelessWidget {
-  const ChapterCard({
-    super.key,
+  ChapterCard({
+    super.key, required this.title, required this.range,
   });
 
+  final String title, range;
+
+  BookController bookController = Get.put(BookController());
   @override
   Widget build(BuildContext context) {
+    String hexagonColor = bookController.currentBookColor.value;
+    hexagonColor = hexagonColor.replaceAll("#", "");
+    int hexValue = int.parse(hexagonColor, radix: 16);
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(15),
@@ -31,11 +40,10 @@ class ChapterCard extends StatelessWidget {
                     width: 45,
                     height: 45,
                     cornerRadius: 10,
-                    color: appGreen(),
+                    color: Color(0xFF000000 | hexValue),
                     child: Text(
-                      "B",
-                      style: appStylePoppins(
-                          Colors.white, FontWeight.w500, 16),
+                      bookController.currentBookAbvr.value,
+                      style: appStylePoppins(Colors.white, FontWeight.w500, 16),
                     ),
                   ),
                   const SizedBox(
@@ -45,18 +53,18 @@ class ChapterCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "ওহীর সূচনা অধ্যায়",
-                        style: appStyle(
-                            const Color(0xff5D646F),
-                            FontWeight.w700,
-                            15),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width*0.45,
+                        child: Text(
+                          title,
+                          style: appStyle(
+                              const Color(0xff5D646F), FontWeight.w700, 15),
+                        ),
                       ),
                       Text(
-                        "সহিহ বুখারী",
+                        bookController.currentBookName.value,
                         style: appStyle(
-                            const Color(0xff353535)
-                                .withOpacity(0.5),
+                            const Color(0xff353535).withOpacity(0.5),
                             FontWeight.w400,
                             14),
                       ),
@@ -71,19 +79,13 @@ class ChapterCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "৭",
-                style: appStyle(
-                  const Color(0xff5D646F),
-                  FontWeight.w700,
-                  15),
+                range,
+                style: appStyle(const Color(0xff5D646F), FontWeight.w700, 15),
               ),
               Text(
                 "হাদিস",
-                style: appStyle(
-                const Color(0xff353535)
-                    .withOpacity(0.5),
-                FontWeight.w400,
-                14),
+                style: appStyle(const Color(0xff353535).withOpacity(0.5),
+                    FontWeight.w400, 14),
               ),
             ],
           )

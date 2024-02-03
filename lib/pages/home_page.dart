@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hadith/components/hadith_book_card.dart';
 import 'package:hadith/const/styles.dart';
+import 'package:hadith/controller/book_controller.dart';
 import 'package:hadith/controller/navigation_controller.dart';
 import 'package:hadith/models/model.dart';
 import 'package:hadith/services/helper.dart';
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   NavigationController navigationController = Get.put(NavigationController());
+  BookController bookController = Get.put(BookController());
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   // Show a loading indicator while waiting for data
-                  return CircularProgressIndicator();
+                  return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   // Show an error message if data loading fails
                   return Text('Error loading books: ${snapshot.error}');
@@ -68,8 +70,8 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
+                          bookController.changeBook(_books_list![index].id, _books_list![index].abvr_code, _books_list![index].color_code, _books_list![index].title);
                           navigationController.changePage(1);
-                          // Handle tap actions
                         },
                         child: HadithBookCard(
                           abvr_code: _books_list![index].abvr_code,

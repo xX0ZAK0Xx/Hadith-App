@@ -8,7 +8,7 @@ import 'package:hadith/pages/chapters_page.dart';
 import 'package:hadith/pages/home_page.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     home: BasePage(),
   ));

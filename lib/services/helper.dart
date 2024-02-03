@@ -53,4 +53,22 @@ class DBHelper {
 
     return books;
   }
+  Future<List<Chapters>> getChapters() async {
+    var dbClient = await db;
+    List<Map> list = await dbClient!.rawQuery('SELECT * FROM chapter');
+    List<Chapters> chapters = [];
+
+    for (int i = 0; i < list.length; i++) {
+      chapters.add(Chapters(
+          list[i]['id'],
+          list[i]['chapter_id'],
+          list[i]['book_id'],
+          list[i]['book_name'],
+          list[i]['title'],
+          list[i]['hadis_range'],
+          list[i]['number']));
+    }
+
+    return chapters;
+  }
 }
