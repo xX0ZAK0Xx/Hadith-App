@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:hadith/components/chapter_card.dart';
 import 'package:hadith/const/styles.dart';
 import 'package:hadith/controller/navigation_controller.dart';
-import 'package:hadith/services/db_helper.dart';
+import 'package:hadith/services/helper.dart';
 
 // ignore: must_be_immutable
 class ChaptersPage extends StatelessWidget {
   ChaptersPage({super.key});
-  DbHelper dbHelper = DbHelper();
+  DBHelper dbHelper = DBHelper();
     NavigationController navigationController = Get.put(NavigationController());
 
   @override

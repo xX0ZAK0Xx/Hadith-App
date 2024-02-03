@@ -3,12 +3,32 @@ import 'package:get/get.dart';
 import 'package:hadith/components/hadith_book_card.dart';
 import 'package:hadith/const/styles.dart';
 import 'package:hadith/controller/navigation_controller.dart';
-import 'package:hadith/services/db_helper.dart';
+import 'package:hadith/models/model.dart';
+import 'package:hadith/services/helper.dart';
 
 // ignore: must_be_immutable
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
-  DbHelper dbHelper = DbHelper();
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  DBHelper dbHelper = DBHelper();
+  late Future<List<Books>> booksFuture;
+  List<Books>? _books_list;
+
+  @override
+  void initState() {
+    super.initState();
+    booksFuture = loadBooks();
+  }
+
+  Future<List<Books>> loadBooks() async {
+    return dbHelper.getBooks();
+  }
+
   NavigationController navigationController = Get.put(NavigationController());
 
   @override
@@ -26,16 +46,44 @@ class HomePage extends StatelessWidget {
             height: 20,
           ),
           Expanded(
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: 15,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                      onTap: () {
-                        navigationController.changePage(1);
-                      },
-                      child: HadithBookCard());
-                }),
+            child: FutureBuilder<List<Books>>(
+              future: booksFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // Show a loading indicator while waiting for data
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  // Show an error message if data loading fails
+                  return Text('Error loading books: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  // Handle the case where there is no data
+                  return Text('No books available.');
+                } else {
+                  // Data loaded successfully, build the ListView.builder
+                  _books_list = snapshot.data;
+
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: _books_list!.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          navigationController.changePage(1);
+                          // Handle tap actions
+                        },
+                        child: HadithBookCard(
+                          abvr_code: _books_list![index].abvr_code,
+                          title: _books_list![index].title,
+                          title_ar: _books_list![index].title_ar,
+                          number_of_hadis:
+                              _books_list![index].number_of_hadis.toString(),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           )
         ],
       ),

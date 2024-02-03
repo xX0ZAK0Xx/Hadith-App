@@ -4,8 +4,9 @@ import 'package:hexagon/hexagon.dart';
 
 class HadithBookCard extends StatelessWidget {
   const HadithBookCard({
-    super.key,
+    super.key, required this.abvr_code, required this.title, required this.title_ar, required this.number_of_hadis,
   });
+  final String abvr_code, title, title_ar, number_of_hadis;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +34,8 @@ class HadithBookCard extends StatelessWidget {
                     cornerRadius: 10,
                     color: appGreen(),
                     child: Text(
-                      "B",
-                      style: appStylePoppins(
-                          Colors.white, FontWeight.w500, 16),
+                      abvr_code,
+                      style: appStylePoppins(Colors.white, FontWeight.w500, 16),
                     ),
                   ),
                   const SizedBox(
@@ -46,17 +46,14 @@ class HadithBookCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "সহিহ বুখারী",
+                        title,
                         style: appStyle(
-                            const Color(0xff5D646F),
-                            FontWeight.w700,
-                            15),
+                            const Color(0xff5D646F), FontWeight.w700, 15),
                       ),
                       Text(
-                        "ইমাম বুখারি",
+                        title_ar,
                         style: appStyle(
-                            const Color(0xff353535)
-                                .withOpacity(0.5),
+                            const Color(0xff353535).withOpacity(0.5),
                             FontWeight.w400,
                             14),
                       ),
@@ -66,25 +63,19 @@ class HadithBookCard extends StatelessWidget {
               ),
             ],
           ),
-                
+
           //----------- total hadith ---------
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "৭৫৬৩",
-                style: appStyle(
-                  const Color(0xff5D646F),
-                  FontWeight.w700,
-                  15),
+                number_of_hadis,
+                style: appStyle(const Color(0xff5D646F), FontWeight.w700, 15),
               ),
               Text(
                 "হাদিস",
-                style: appStyle(
-                const Color(0xff353535)
-                    .withOpacity(0.5),
-                FontWeight.w400,
-                14),
+                style: appStyle(const Color(0xff353535).withOpacity(0.5),
+                    FontWeight.w400, 14),
               ),
             ],
           )
