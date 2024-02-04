@@ -30,9 +30,9 @@ class _SectionsPageState extends State<SectionsPage> {
   }
 
   Future<List<Sections>> loadSections() async {
-    return dbHelper.getSections(bookController.currentBookID.value, bookController.currentChapterID.value);
+    return dbHelper.getSections(bookController.currentBookID.value,
+        bookController.currentChapterID.value);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class _SectionsPageState extends State<SectionsPage> {
                     ));
                   } else if (snapshot.hasError) {
                     // Show an error message if data loading fails
-                    return Text('Error loading books: ${snapshot.error}');
+                    return Text('Error loading sections: ${snapshot.error}');
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     // Handle the case where there is no data
                     return Text('No books available.');
@@ -111,6 +111,12 @@ class _SectionsPageState extends State<SectionsPage> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                             onTap: () {
+                              bookController.currentSectionID.value = index + 1;
+                              bookController.currentSectionNumber.value =
+                                  _sections_list![index].number!;
+                              bookController.currentSectionPreface.value =
+                                  _sections_list![index].preface!;
+                              bookController.currentSectionTitle.value =                                 _sections_list![index].title!;
                               dbHelper.getHadiths(
                                   currentBookID, currentChapterID, index + 1);
                               navigationController.changePage(3);

@@ -73,9 +73,10 @@ class DBHelper {
     return chapters;
   }
 
-  Future<List<Sections>> getSections() async {
+  Future<List<Sections>> getSections(int book, int chapter) async {
     var dbClient = await db;
-    List<Map> list = await dbClient!.rawQuery('SELECT * FROM section');
+    List<Map> list = await dbClient!.rawQuery(
+        'SELECT * FROM section WHERE book_id = $book AND chapter_id = $chapter');
     List<Sections> sections = [];
     for (int i = 0; i < list.length; i++) {
       sections.add(Sections(
@@ -90,5 +91,35 @@ class DBHelper {
           list[i]['number']));
     }
     return sections;
+  }
+
+  Future<List<Hadiths>> getHadiths(int book, int chapter, int section) async {
+    var dbClient = await db;
+    List<Map> list = await dbClient!.rawQuery(
+        'SELECT * FROM hadith WHERE book_id = $book AND chapter_id = $chapter and section_id = $section ORDER BY hadith_id ASC');
+    List<Hadiths> hadiths = [];
+    for (int i = 0; i < list.length; i++) {
+      hadiths.add(Hadiths(
+          list[i]['id'],
+          list[i]['book_id'],
+          list[i]['chapter_id'],
+          list[i]['section_id'],
+          list[i]['hadith_id'],
+          list[i]['grade_id'],
+          list[i]['book_name'],
+          list[i]['hadith_key'],
+          list[i]['narrator'],
+          list[i]['bn'],
+          list[i]['ar'],
+          list[i]['ar_diacless'],
+          list[i]['note'],
+          list[i]['grade'],
+          list[i]['grade_color']));
+    }
+    print("book: $book, chapter: $chapter, section: $section");
+    for (int i = 0; i < hadiths.length; i++) {
+      print(hadiths[i].narrator);
+    }
+    return hadiths;
   }
 }

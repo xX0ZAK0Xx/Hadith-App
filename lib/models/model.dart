@@ -23,3 +23,33 @@ class Sections {
   Sections(this.id, this.book_id, this.chapter_id, this.section_id,
       this.sort_order, this.book_name, this.title, this.preface, this.number);
 }
+
+class Hadiths {
+  int? id, book_id, chapter_id, section_id, hadith_id, grade_id;
+  String? book_name,
+      hadith_key,
+      narrator,
+      bn,
+      ar,
+      ar_diacless,
+      note,
+      grade,
+      grade_color;
+
+  Hadiths(
+      this.id,
+      this.book_id,
+      this.chapter_id,
+      this.section_id,
+      this.hadith_id,
+      this.grade_id,
+      this.book_name,
+      this.hadith_key,
+      this.narrator,
+      this.bn,
+      this.ar,
+      this.ar_diacless,
+      this.note,
+      this.grade,
+      this.grade_color);
+}
