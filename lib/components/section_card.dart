@@ -5,17 +5,23 @@ import 'package:hadith/const/styles.dart';
 import 'package:hadith/controller/book_controller.dart';
 import 'package:hexagon/hexagon.dart';
 
-class ChapterCard extends StatelessWidget {
-  ChapterCard({
-    super.key, required this.title, required this.range, required this.index,
+class SectionCard extends StatelessWidget {
+  SectionCard({
+    super.key,
+    required this.title,
+    required this.number,
+    required this.index,
   });
 
-  final String title, range;
+  String title, number;
   final int index;
 
   BookController bookController = Get.put(BookController());
   @override
   Widget build(BuildContext context) {
+    if (title.contains("অধ্যায়ঃ")) {
+      title = "";
+    }
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(15),
@@ -47,46 +53,18 @@ class ChapterCard extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width*0.45,
-                        child: Text(
-                          title,
-                          style: appStyle(
-                              const Color(0xff5D646F), FontWeight.w700, 15),
-                        ),
-                      ),
-                      Text(
-                        bookController.currentBookName.value,
-                        style: appStyle(
-                            const Color(0xff353535).withOpacity(0.5),
-                            FontWeight.w400,
-                            14),
-                      ),
-                    ],
-                  )
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width*0.7,
+                    child: Text(
+                      "$number $title",
+                      style:
+                          appStyle(const Color(0xff5D646F), FontWeight.w700, 15),
+                    ),
+                  ),
                 ],
               ),
             ],
           ),
-          //----------- total hadith ---------
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                range,
-                style: appStyle(const Color(0xff5D646F), FontWeight.w700, 15),
-              ),
-              Text(
-                "হাদিস",
-                style: appStyle(const Color(0xff353535).withOpacity(0.5),
-                    FontWeight.w400, 14),
-              ),
-            ],
-          )
         ],
       ),
     );

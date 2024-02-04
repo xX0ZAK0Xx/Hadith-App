@@ -6,6 +6,7 @@ import 'package:hadith/controller/navigation_controller.dart';
 import 'package:hadith/pages/details_page.dart';
 import 'package:hadith/pages/chapters_page.dart';
 import 'package:hadith/pages/home_page.dart';
+import 'package:hadith/pages/sections_page.dart';
 
 void main() {
   runApp(GetMaterialApp(
@@ -39,45 +40,60 @@ class BasePage extends StatelessWidget {
           children: [
             HomePage(),
             ChaptersPage(),
+            SectionsPage(),
             DetailsPage(),
           ],
         ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-            child: Container(
-              padding: const EdgeInsets.all(15),
-              height: 60,
-              color: Colors.white,
-              child: Obx(()=>Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  navIcon(context, FontAwesomeIcons.house, 0),
-                  navIcon(context, FontAwesomeIcons.bookOpen, 1),
-                  navIcon(context, FontAwesomeIcons.book, 2),
+        bottomNavigationBar: Obx(() {
+          if (navigationController.currentPage <= 2) {
+            return Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
                 ],
-              )),
-            ),
-          ),
-        ),
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  height: 60,
+                  color: Colors.white,
+                  child: Obx(() => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          navIcon(context, FontAwesomeIcons.house, 0),
+                          navIcon(context, FontAwesomeIcons.bookOpen, 1),
+                          navIcon(context, FontAwesomeIcons.book, 2),
+                        ],
+                      )),
+                ),
+              ),
+            );
+          } else {
+            return Container(height: 0,);
+          }
+        }),
       ),
     );
   }
 
-  IconButton navIcon(BuildContext context, IconData icon,int page, ) {
+  IconButton navIcon(
+    BuildContext context,
+    IconData icon,
+    int page,
+  ) {
     return IconButton(
-      icon: Icon(icon, color: page == navigationController.currentPage.value ? appGreen() : appGrey()),
+      icon: Icon(icon,
+          color: page == navigationController.currentPage.value
+              ? appGreen()
+              : appGrey()),
       onPressed: () {
         navigationController.changePage(page);
       },

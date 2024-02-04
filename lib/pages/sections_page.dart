@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hadith/components/chapter_card.dart';
+import 'package:hadith/components/section_card.dart';
 import 'package:hadith/const/styles.dart';
 import 'package:hadith/controller/book_controller.dart';
 import 'package:hadith/controller/navigation_controller.dart';
@@ -9,26 +9,26 @@ import 'package:hadith/models/model.dart';
 import 'package:hadith/services/helper.dart';
 
 // ignore: must_be_immutable
-class ChaptersPage extends StatefulWidget {
-  ChaptersPage({super.key});
+class SectionsPage extends StatefulWidget {
+  SectionsPage({super.key});
 
   @override
-  State<ChaptersPage> createState() => _ChaptersPageState();
+  State<SectionsPage> createState() => _SectionsPageState();
 }
 
-class _ChaptersPageState extends State<ChaptersPage> {
+class _SectionsPageState extends State<SectionsPage> {
   DBHelper dbHelper = DBHelper();
-  late Future<List<Chapters>> chaptersFuture;
-  List<Chapters>? _chapters_list;
+  late Future<List<Sections>> sectionsFuture;
+  List<Sections>? _sections_list;
 
   @override
   void initState() {
     super.initState();
-    chaptersFuture = loadChapters();
+    sectionsFuture = loadSections();
   }
 
-  Future<List<Chapters>> loadChapters() async {
-    return dbHelper.getChapters();
+  Future<List<Sections>> loadSections() async {
+    return dbHelper.getSections();
   }
 
   NavigationController navigationController = Get.put(NavigationController());
@@ -48,7 +48,7 @@ class _ChaptersPageState extends State<ChaptersPage> {
               size: 25,
             ),
             onPressed: () {
-              navigationController.changePage(0);
+              navigationController.changePage(1);
             },
           ),
           tileColor: appGreen(),
@@ -57,7 +57,7 @@ class _ChaptersPageState extends State<ChaptersPage> {
             style: appStylePoppins(Colors.white, FontWeight.w600, 16),
           ),
           subtitle: Text(
-            "${bookController.currentBookTotalHadis.value} টি হাদিস",
+            bookController.currentChapter.value,
             style: appStylePoppins(Colors.white, FontWeight.w500, 14),
           ),
         ),
@@ -73,8 +73,8 @@ class _ChaptersPageState extends State<ChaptersPage> {
                 color: bgColor(),
               ),
               padding: const EdgeInsets.all(15),
-              child: FutureBuilder<List<Chapters>>(
-                future: chaptersFuture,
+              child: FutureBuilder<List<Sections>>(
+                future: sectionsFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data
@@ -90,29 +90,33 @@ class _ChaptersPageState extends State<ChaptersPage> {
                     return Text('No books available.');
                   } else {
                     // Data loaded successfully, build the ListView.builder
-                    _chapters_list = snapshot.data;
+                    _sections_list = snapshot.data;
+                    int currentChapterID = bookController.currentChapterID.value;
                     int currentBookID = bookController.currentBookID.value;
-                    // Filter the _chapters_list to include only chapters with the matching book_id
-                    List<Chapters>? selectedChapter;
-                    selectedChapter = _chapters_list!
-                        .where((chapter) => chapter.book_id == currentBookID)
+
+
+                    List<Sections>? selectedSection;
+                    selectedSection = _sections_list!
+                        .where((section) =>
+                            ((section.chapter_id == currentChapterID) &&
+                                (section.book_id == currentBookID)))
                         .toList();
 
+                    // for (int i = 0; i < selectedSection.length; i++) {
+                    //   print(selectedSection[i].title);
+                    // }
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: selectedChapter.length,
+                      itemCount: selectedSection.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                             onTap: () {
-                              navigationController.changePage(2);
-                              bookController.changChapter(
-                                  selectedChapter![index].title,
-                                  selectedChapter[index].chapter_id);
+                              navigationController.changePage(3);
                             },
-                            child: ChapterCard(
+                            child: SectionCard(
                               index: index + 1,
-                              title: selectedChapter![index].title,
-                              range: selectedChapter[index].hadis_range,
+                              title: selectedSection![index].title!,
+                              number: selectedSection[index].number!,
                             ));
                       },
                     );

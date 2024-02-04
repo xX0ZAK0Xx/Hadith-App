@@ -11,6 +11,15 @@ class Books {
 class Chapters {
   int id, chapter_id, book_id, number;
   String title, hadis_range, book_name;
-  
-  Chapters(this.id, this.chapter_id, this.book_id, this.book_name, this.title, this.hadis_range, this.number);
+
+  Chapters(this.id, this.chapter_id, this.book_id, this.book_name, this.title,
+      this.hadis_range, this.number);
+}
+
+class Sections {
+  int? id, book_id, chapter_id, section_id, sort_order;
+  String? book_name, title, preface, number;
+
+  Sections(this.id, this.book_id, this.chapter_id, this.section_id,
+      this.sort_order, this.book_name, this.title, this.preface, this.number);
 }

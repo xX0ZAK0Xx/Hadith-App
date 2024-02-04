@@ -53,7 +53,9 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   // Show a loading indicator while waiting for data
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator(
+                      color: appGreen(),
+                    ));
                 } else if (snapshot.hasError) {
                   // Show an error message if data loading fails
                   return Text('Error loading books: ${snapshot.error}');

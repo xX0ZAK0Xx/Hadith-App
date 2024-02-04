@@ -12,11 +12,18 @@ class BookController extends GetxController {
   RxInt currentChapterID = 1.obs;
   RxInt currentHadithID = 1.obs;
 
+  RxString currentChapter = "ওহীর সূচনা অধ্যায়".obs;
+
   void changeBook(int book, String abvr, String color, String name, int totalHadis) {
     currentBookID.value = book;
     currentBookAbvr.value = abvr;
     currentBookColor.value = color;
     currentBookName.value = name;
     currentBookTotalHadis.value = totalHadis;
+  }
+
+  void changChapter(String name, int id){
+    currentChapter.value = name;
+    currentChapterID.value = id;
   }
 }
