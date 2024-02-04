@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          bookController.changeBook(_books_list![index].id, _books_list![index].abvr_code, _books_list![index].color_code, _books_list![index].title);
+                          bookController.changeBook(_books_list![index].id, _books_list![index].abvr_code, _books_list![index].color_code, _books_list![index].title, _books_list![index].number_of_hadis);
                           navigationController.changePage(1);
                         },
                         child: HadithBookCard(

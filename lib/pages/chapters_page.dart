@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hadith/components/chapter_card.dart';
@@ -35,65 +36,92 @@ class _ChaptersPageState extends State<ChaptersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 15, right: 10, left: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "সব অধ্যায় সমূহ",
-            style: appStyle(Colors.grey.shade700, FontWeight.bold, 20),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: FutureBuilder<List<Chapters>>(
-              future: chaptersFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  // Show a loading indicator while waiting for data
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  // Show an error message if data loading fails
-                  return Text('Error loading books: ${snapshot.error}');
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  // Handle the case where there is no data
-                  return Text('No books available.');
-                } else {
-                  // Data loaded successfully, build the ListView.builder
-                  _chapters_list = snapshot.data;
-                  int currentBookID = bookController.currentBookID.value;
-                  // Filter the _chapters_list to include only chapters with the matching book_id
-                  _chapters_list = _chapters_list!
-                      .where((chapter) => chapter.book_id == currentBookID)
-                      .toList();
-
-                  // Print the filtered _chapters_list
-                  // for (int i = 0; i < _chapters_list!.length; i++) {
-                  //   print(_chapters_list![i].book_id);
-                  // }
-
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: _chapters_list!.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                          onTap: () {
-                            navigationController.changePage(2);
-                          },
-                          child: ChapterCard(
-                            title: _chapters_list![index].title,
-                            range: _chapters_list![index].hadis_range,
-                          ));
-                    },
-                  );
-                }
-              },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //------------- AppBar -------------------
+        ListTile(
+          leading: IconButton(
+            icon: const Icon(
+              CupertinoIcons.back,
+              color: Colors.white,
+              size: 25,
             ),
-          )
-        ],
-      ),
+            onPressed: () {
+              navigationController.changePage(0);
+            },
+          ),
+          tileColor: appGreen(),
+          title: Text(
+            bookController.currentBookName.value,
+            style: appStylePoppins(Colors.white, FontWeight.w600, 16),
+          ),
+          subtitle: Text(
+            "${bookController.currentBookTotalHadis.value} টি হাদিস",
+            style: appStylePoppins(Colors.white, FontWeight.w500, 14),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: appGreen(),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                color: bgColor(),
+              ),
+              padding: const EdgeInsets.all(15),
+              child: FutureBuilder<List<Chapters>>(
+                future: chaptersFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator while waiting for data
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    // Show an error message if data loading fails
+                    return Text('Error loading books: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // Handle the case where there is no data
+                    return Text('No books available.');
+                  } else {
+                    // Data loaded successfully, build the ListView.builder
+                    _chapters_list = snapshot.data;
+                    int currentBookID = bookController.currentBookID.value;
+                    // Filter the _chapters_list to include only chapters with the matching book_id
+                    List<Chapters>? selectedChapter;
+                    selectedChapter = _chapters_list!
+                        .where((chapter) => chapter.book_id == currentBookID)
+                        .toList();
+                  
+                    // Print the filtered _chapters_list
+                    // for (int i = 0; i < _chapters_list!.length; i++) {
+                    //   print(_chapters_list![i].book_id);
+                    // }
+                  
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: selectedChapter.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                            onTap: () {
+                              navigationController.changePage(2);
+                            },
+                            child: ChapterCard(
+                              index: index + 1,
+                              title: selectedChapter![index].title,
+                              range: selectedChapter[index].hadis_range,
+                            ));
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

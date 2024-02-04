@@ -7,10 +7,11 @@ import 'package:hexagon/hexagon.dart';
 
 class ChapterCard extends StatelessWidget {
   ChapterCard({
-    super.key, required this.title, required this.range,
+    super.key, required this.title, required this.range, required this.index,
   });
 
   final String title, range;
+  final int index;
 
   BookController bookController = Get.put(BookController());
   @override
@@ -42,7 +43,7 @@ class ChapterCard extends StatelessWidget {
                     cornerRadius: 10,
                     color: Color(0xFF000000 | hexValue),
                     child: Text(
-                      bookController.currentBookAbvr.value,
+                      index.toString(),
                       style: appStylePoppins(Colors.white, FontWeight.w500, 16),
                     ),
                   ),
