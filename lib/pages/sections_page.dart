@@ -21,6 +21,8 @@ class _SectionsPageState extends State<SectionsPage> {
   late Future<List<Sections>> sectionsFuture;
   List<Sections>? _sections_list;
 
+  BookController bookController = Get.put(BookController());
+  NavigationController navigationController = Get.put(NavigationController());
   @override
   void initState() {
     super.initState();
@@ -28,11 +30,9 @@ class _SectionsPageState extends State<SectionsPage> {
   }
 
   Future<List<Sections>> loadSections() async {
-    return dbHelper.getSections();
+    return dbHelper.getSections(bookController.currentBookID.value, bookController.currentChapterID.value);
   }
 
-  NavigationController navigationController = Get.put(NavigationController());
-  BookController bookController = Get.put(BookController());
 
   @override
   Widget build(BuildContext context) {
@@ -91,32 +91,34 @@ class _SectionsPageState extends State<SectionsPage> {
                   } else {
                     // Data loaded successfully, build the ListView.builder
                     _sections_list = snapshot.data;
-                    int currentChapterID = bookController.currentChapterID.value;
+                    int currentChapterID =
+                        bookController.currentChapterID.value;
                     int currentBookID = bookController.currentBookID.value;
 
-
-                    List<Sections>? selectedSection;
-                    selectedSection = _sections_list!
-                        .where((section) =>
-                            ((section.chapter_id == currentChapterID) &&
-                                (section.book_id == currentBookID)))
-                        .toList();
+                    // List<Sections>? selectedSection;
+                    // selectedSection = _sections_list!
+                    //     .where((section) =>
+                    //         ((section.chapter_id == currentChapterID) &&
+                    //             (section.book_id == currentBookID)))
+                    //     .toList();
 
                     // for (int i = 0; i < selectedSection.length; i++) {
                     //   print(selectedSection[i].title);
                     // }
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: selectedSection.length,
+                      itemCount: _sections_list!.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                             onTap: () {
+                              dbHelper.getHadiths(
+                                  currentBookID, currentChapterID, index + 1);
                               navigationController.changePage(3);
                             },
                             child: SectionCard(
                               index: index + 1,
-                              title: selectedSection![index].title!,
-                              number: selectedSection[index].number!,
+                              title: _sections_list![index].title!,
+                              number: _sections_list![index].number!,
                             ));
                       },
                     );
