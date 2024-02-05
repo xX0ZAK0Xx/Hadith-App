@@ -15,11 +15,14 @@ class DBHelper {
   }
 
   initDB() async {
+    //goes to the app directory
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    //joins the directory to the file name
     String path = join(documentsDirectory.path, 'hadith_bn_test.db');
 
     bool dbExists = await io.File(path).exists();
     if (!dbExists) {
+      //if the file doesnt exist, the it loads from the assets
       ByteData data =
           await rootBundle.load(join("assets/database", "hadith_bn_test.db"));
       List<int> bytes =

@@ -31,13 +31,13 @@ class BasePage extends StatelessWidget {
       onWillPop: () async {
         if (navigationController.currentPage.value > 0) {
           navigationController.pageController.previousPage(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             curve: Curves.ease,
           );
           return false; // Prevent default back button behavior
         } else {
-          // Handle first page back button press (e.g., show confirmation dialog)
-          return true; // Allow app to close
+          // Handle first page back button press
+          return true; 
         }
       },
       child: SafeArea(
@@ -49,7 +49,7 @@ class BasePage extends StatelessWidget {
               navigationController.currentPage.value = value;
             },
             controller: navigationController.pageController,
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             children: [
               HomePage(),
               ChaptersPage(),
