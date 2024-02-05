@@ -117,8 +117,8 @@ class _SectionsPageState extends State<SectionsPage> {
                               bookController.currentSectionPreface.value =
                                   _sections_list![index].preface!;
                               bookController.currentSectionTitle.value =                                 _sections_list![index].title!;
-                              dbHelper.getHadiths(
-                                  currentBookID, currentChapterID, index + 1);
+                              // dbHelper.getHadiths(
+                              //     currentBookID, currentChapterID, index + 1);
                               navigationController.changePage(3);
                             },
                             child: SectionCard(

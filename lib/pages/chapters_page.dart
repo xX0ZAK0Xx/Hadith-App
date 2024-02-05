@@ -20,6 +20,8 @@ class _ChaptersPageState extends State<ChaptersPage> {
   DBHelper dbHelper = DBHelper();
   late Future<List<Chapters>> chaptersFuture;
   List<Chapters>? _chapters_list;
+  NavigationController navigationController = Get.put(NavigationController());
+  BookController bookController = Get.put(BookController());
 
   @override
   void initState() {
@@ -28,11 +30,9 @@ class _ChaptersPageState extends State<ChaptersPage> {
   }
 
   Future<List<Chapters>> loadChapters() async {
-    return dbHelper.getChapters();
+    return dbHelper.getChapters(bookController.currentBookID.value);
   }
 
-  NavigationController navigationController = Get.put(NavigationController());
-  BookController bookController = Get.put(BookController());
 
   @override
   Widget build(BuildContext context) {

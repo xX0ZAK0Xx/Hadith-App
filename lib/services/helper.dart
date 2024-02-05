@@ -54,9 +54,9 @@ class DBHelper {
     return books;
   }
 
-  Future<List<Chapters>> getChapters() async {
+  Future<List<Chapters>> getChapters(int book) async {
     var dbClient = await db;
-    List<Map> list = await dbClient!.rawQuery('SELECT * FROM chapter');
+    List<Map> list = await dbClient!.rawQuery('SELECT * FROM chapter WHERE book_id = $book');
     List<Chapters> chapters = [];
 
     for (int i = 0; i < list.length; i++) {
@@ -116,10 +116,10 @@ class DBHelper {
           list[i]['grade'],
           list[i]['grade_color']));
     }
-    print("book: $book, chapter: $chapter, section: $section");
-    for (int i = 0; i < hadiths.length; i++) {
-      print(hadiths[i].narrator);
-    }
+    // print("book: $book, chapter: $chapter, section: $section");
+    // for (int i = 0; i < hadiths.length; i++) {
+    //   print(hadiths[i].narrator);
+    // }
     return hadiths;
   }
 }

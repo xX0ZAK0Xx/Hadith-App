@@ -27,59 +27,73 @@ class BasePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: bgColor(),
-        // body: Obx(()=>pages[navigationController.currentPage.value],),
-        body: PageView(
-          onPageChanged: (value) {
-            navigationController.currentPage.value = value;
-          },
-          controller: navigationController.pageController,
-          physics: BouncingScrollPhysics(),
-          children: [
-            HomePage(),
-            ChaptersPage(),
-            SectionsPage(),
-            DetailsPage(),
-          ],
-        ),
-        bottomNavigationBar: Obx(() {
-          if (navigationController.currentPage <= 2) {
-            return Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  height: 60,
-                  color: Colors.white,
-                  child: Obx(() => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          navIcon(context, FontAwesomeIcons.house, 0),
-                          navIcon(context, FontAwesomeIcons.bookOpen, 1),
-                          navIcon(context, FontAwesomeIcons.book, 2),
-                        ],
-                      )),
+    return WillPopScope(
+      onWillPop: () async {
+        if (navigationController.currentPage.value > 0) {
+          navigationController.pageController.previousPage(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.ease,
+          );
+          return false; // Prevent default back button behavior
+        } else {
+          // Handle first page back button press (e.g., show confirmation dialog)
+          return true; // Allow app to close
+        }
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: bgColor(),
+          // body: Obx(()=>pages[navigationController.currentPage.value],),
+          body: PageView(
+            onPageChanged: (value) {
+              navigationController.currentPage.value = value;
+            },
+            controller: navigationController.pageController,
+            physics: BouncingScrollPhysics(),
+            children: [
+              HomePage(),
+              ChaptersPage(),
+              SectionsPage(),
+              DetailsPage(),
+            ],
+          ),
+          bottomNavigationBar: Obx(() {
+            if (navigationController.currentPage <= 2) {
+              return Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
                 ),
-              ),
-            );
-          } else {
-            return Container(height: 0,);
-          }
-        }),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    height: 60,
+                    color: Colors.white,
+                    child: Obx(() => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            navIcon(context, FontAwesomeIcons.house, 0),
+                            navIcon(context, FontAwesomeIcons.bookOpen, 1),
+                            navIcon(context, FontAwesomeIcons.book, 2),
+                          ],
+                        )),
+                  ),
+                ),
+              );
+            } else {
+              return Container(height: 0,);
+            }
+          }),
+        ),
       ),
     );
   }

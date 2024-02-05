@@ -55,7 +55,7 @@ class DetailsCard extends StatelessWidget {
                       overflow: TextOverflow.clip,
                       text: TextSpan(children: [
                         TextSpan(
-                          text: sectionNumber,
+                          text: "$sectionNumber- ",
                           style: appStyleInter(appGreen(), FontWeight.w600, 16),
                         ),
                         TextSpan(
@@ -67,16 +67,18 @@ class DetailsCard extends StatelessWidget {
                   ),
                 ],
               ),
-              //---------------- divider ----------------
-              const Divider(
-                color: Color(0xffEFEFEF),
-              ),
-              //---------------- lower text ----------------
-              Text(
-                sectionPreface!,
-                style: appStyle(const Color(0xff353535).withOpacity(0.5),
-                    FontWeight.w400, 14),
-              )
+              if (sectionPreface!.isNotEmpty)
+                Column(
+                  children: [
+                    const Divider(
+                      color: Color(0xffEFEFEF),
+                    ),
+                    Text(
+                      sectionPreface!,
+                      style: appStyle(const Color(0xff353535).withOpacity(0.5), FontWeight.w400, 14),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
@@ -87,6 +89,7 @@ class DetailsCard extends StatelessWidget {
         ),
 
         //---------- Lower Card ----------------
+        if(hadithId != null)
         Column(
           children: List.generate(totalHadith!, (index) {
             return Container(
@@ -234,7 +237,7 @@ class DetailsCard extends StatelessWidget {
                         hadiths[index].ar,
                         textAlign: TextAlign.end,
                         style: appStyle(
-                            const Color(0xff353535), FontWeight.w400, 22),
+                            const Color(0xff353535), FontWeight.w400, 20),
                       ),
                       const SizedBox(
                         height: 20,
@@ -262,23 +265,29 @@ class DetailsCard extends StatelessWidget {
                       Text(
                         hadiths[index].bn,
                         style: appStyleInter(
-                            const Color(0xff353535), FontWeight.w400, 16),
+                            const Color(0xff353535), FontWeight.w400, 15),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      //---------------- divider ----------------
-                      const Divider(
-                        color: Color(0xffEFEFEF),
-                      ),
-                      //-------- See also --------------
-                      Text(
-                        hadiths[index].note,
-                        style: appStyleInter(
-                            const Color(0xff353535).withOpacity(0.5),
-                            FontWeight.w400,
-                            14),
-                      ),
+                      if(hadiths[index].note.isNotEmpty)
+                        Column(children: [
+                          //---------------- divider ----------------
+                          const Divider(
+                            color: Color(0xffEFEFEF),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          //-------- See also --------------
+                          Text(
+                            hadiths[index].note,
+                            style: appStyleInter(
+                                const Color(0xff353535).withOpacity(0.5),
+                                FontWeight.w400,
+                                14),
+                          ),
+                        ],),
                     ],
                   ),
                 );
